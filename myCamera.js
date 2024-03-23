@@ -1,7 +1,8 @@
 // MyCamera.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera/next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import * as Location from 'expo-location';
 
 export default function MyCamera({ navigation }) {
   const [facing, setFacing] = useState('back');
