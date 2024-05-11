@@ -5,6 +5,7 @@ import MyCamera from "./pages/myCamera";
 import ScannedDataScreen from './pages/ScannedDataScreen';
 import * as Location from 'expo-location';
 import HistoryPage from './pages/HistoryPage';
+import ReportPage from './pages/ReportPage';
 
 const Stack = createStackNavigator();
 
@@ -13,8 +14,9 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Camera" component={MyCamera} options={{ headerShown: false }}/>
+        <Stack.Screen name="Report" component={ReportPage} options={{ headerShown: false }}/>
         <Stack.Screen name="ScannedData" component={ScannedDataScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="HistoryPage" options={{ headerShown: false }}>
+        <Stack.Screen name="History" options={{ headerShown: false }}>
           {props => <HistoryPage {...props} />}
         </Stack.Screen>
       </Stack.Navigator>

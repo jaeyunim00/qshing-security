@@ -18,6 +18,9 @@ export default function ScannedDataScreen({ route }) {
   const [location, setLocation] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  // 안전한지, 아닌지 전달 받기
+  const [isItSecure, setIsItSecure] = useState(false);
+
   useEffect(() => {
     (async () => {      
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -75,15 +78,16 @@ export default function ScannedDataScreen({ route }) {
   };
 
   const handleBackPress = () => {
-    navigation.navigate('Camera');
+    navigation.goBack();
   };
 
   const handleSharePress = () => {
     console.log("share btn pressed");
   }
 
+  //리포트 버튼 누르면 location값 전달하면서 이동하기
   const handleNotifyPress = () => {
-    console.log("notify btn pressed");
+    navigation.navigate("Report", {location: location.coords.longitude});
   }
 
   return (
@@ -94,21 +98,48 @@ export default function ScannedDataScreen({ route }) {
           <View style={styles.infoLine}></View>
         </View>
         <View style={styles.securityContainer}>
-          <MaterialIcons name="security" size={130} style={{color: "#6B7EFF"}}/>
-          <Text style={styles.securityMessage}>안전</Text>
+          {isItSecure ? <MaterialIcons name="security" size={130} style={{color: "#6B7EFF"}}/>: <MaterialIcons name="no-encryption-gmailerrorred" size={130} style={{color: "#DB4455"}}/>}
+          {isItSecure ? <Text style={styles.securityMessage}>안전</Text> : <Text style={{color: "#DB4455", fontSize: 27, fontWeight: "bold"}}>위험</Text>}
         </View>
         <View style={styles.urlContainer}>
           <Text style={styles.urlContent}>주소: </Text>
           <Text>{data}</Text>
         </View>
       </View>
-      <View style={styles.btnContainer}>
-        <View style={styles.btnBox}>
-          <TouchableOpacity onPress={() => Linking.openURL(data)}>
-            <Text style={styles.btnBoxMessage}>접속하기</Text>
-          </TouchableOpacity>
+      {
+        isItSecure ? 
+        <View style={styles.btnContainer}>
+          <View style={{
+                      width: 200,
+                      height: 50,
+                      width: 150,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      backgroundColor: "#6B7EFF"
+          }}>
+            <TouchableOpacity onPress={() => Linking.openURL(data)}>
+              <Text style={styles.btnBoxMessage}>접속하기</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+        :
+        <View style={styles.btnContainer}>
+          <View style={{
+                      width: 200,
+                      height: 50,
+                      width: 150,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      backgroundColor: "#DB4455"
+          }}>
+            <TouchableOpacity onPress={() => Linking.openURL(data)}>
+              <Text style={styles.btnBoxMessage}>접속하기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      }
       {/* <Text>{location ? `위도: ${location.coords.longitude} 경도: ${location.coords.latitude}` : text}</Text> */}
       <NavigationBar iconStyle_scanner={{ color: '#6B7EFF' }} onNotifyPress={handleNotifyPress} onBackPress={handleBackPress} onSharePress={handleSharePress}/>
     </View>
@@ -131,7 +162,7 @@ const styles = StyleSheet.create({
   infoMessageText: {
     fontSize: 40,
     marginTop: 60,
-    marginBottom: 20,
+    marginBottom: 10,
     color: "#495057",
   },
   infoLine: {
@@ -144,13 +175,12 @@ const styles = StyleSheet.create({
     width: "90%",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: 10, 
     marginTop: 10,
-  },
-  securityMessage: {
-    fontSize: 27,
-    color: "#6B7EFF",
-    fontWeight: "bold",
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   urlContainer: {
     backgroundColor: "white",
@@ -161,6 +191,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row', // 요소들을 가로로 나열
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   urlContent: {
     fontWeight: "bold",
@@ -170,15 +204,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  btnBox: {
-    width: 200,
-    height: 50,
-    backgroundColor: "#6B7EFF",
-    width: 150,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   btnBoxMessage: {
     color: "white",

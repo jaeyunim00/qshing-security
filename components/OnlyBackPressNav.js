@@ -3,16 +3,12 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function NavigationBar({ onScannerPress, onHistoryPress, iconStyle_scanner, iconStyle_history }) {
+export default function NavigationBar({ onBackPress }) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onScannerPress}>
-        <MaterialIcons name="qr-code-scanner" size={24} style={[styles.icon, iconStyle_scanner]}/>
-        <Text style={[styles.buttonText, iconStyle_scanner]}>스캐너</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onHistoryPress}>
-        <MaterialIcons name="history" size={24} style={[styles.icon, iconStyle_history]}/>
-        <Text style={[styles.buttonText, iconStyle_history]}>이용기록</Text>
+      <TouchableOpacity style={styles.button} onPress={onBackPress}>
+        <MaterialIcons name="arrow-back" size={24} style={[styles.icon]}/>
+        <Text style={[styles.buttonText]}>뒤로가기</Text>
       </TouchableOpacity>
     </View>
   );
@@ -25,10 +21,11 @@ const styles = StyleSheet.create({
     left: 0, // 왼쪽 정렬
     right: 0, // 오른쪽 정렬
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: "flex-start",
     alignItems: 'center',
     backgroundColor: 'white',
     height: 80,
+    paddingLeft: 40,
     shadowColor: "#000",
     shadowOffset: {
     	width: 0,

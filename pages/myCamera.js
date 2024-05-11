@@ -21,7 +21,7 @@
     };
 
     const handleHistoryPress = () => {
-      navigation.navigate('HistoryPage'); // 이용기록 페이지로 이동
+      navigation.navigate('History'); // 이용기록 페이지로 이동
     };
 
     return (
@@ -60,6 +60,10 @@
       height: 60,
       width: 350,
       borderRadius: 15,
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     },
     qrBox: {
       width: 200,
