@@ -1,10 +1,11 @@
   // MyCamera.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Modal } from 'react-native';
 import NavigationBar from '../components/OnlyBackPressNav';
 
   export default function MyCamera({ navigation, route }) {
-    const { location } = route.params;
+    const latitude = route.params.location.latitude;
+    const longitude = route.params.location.longitude;
     const [detailAddress, setDetailAddress] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -25,7 +26,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
         <View style={styles.inputInfoContainer}>
           <View style={styles.inputInfoMyLocation}>
             <Text style={{padding: 10, fontSize: "15", fontWeight: "bold", color: "#495057"}}>현재 내 위치</Text>
-            <Text style={{padding: 10, fontSize: "15", fontWeight: 800}}>{location}</Text>
+            <Text style={{padding: 10, fontSize: "15", fontWeight: 800}}>위도: {latitude}, 경도: {longitude}</Text>
           </View>
           <View style={styles.infoLine}></View>
           <View style={styles.inputInfoDetail}>
@@ -38,10 +39,6 @@ import NavigationBar from '../components/OnlyBackPressNav';
           />
           </View>
         </View>
-        <View style={styles.inputImageContainer}>
-          <Text>여기는 나중에 이미지 받기</Text>
-          <View style={styles.inputImageBtn}></View>
-        </View>
         <View style={styles.btnContainer}>
           <View style={{
                       width: 200,
@@ -50,7 +47,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: 10,
-                      backgroundColor: "white",
+                      backgroundColor: "#FFFFFF",
           }}>
             <TouchableOpacity onPress={handleReportBtn}>
               <Text style={{fontWeight: "bold"}}>알리기 📢</Text>
@@ -91,7 +88,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'white',
+      backgroundColor: '#FFFFFF',
       height: 60,
       width: 350,
       borderRadius: 15,
@@ -108,7 +105,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'white',
+      backgroundColor: '`#FFFFFF`',
       height: 300,
       width: 350,
       borderRadius: 15,
@@ -132,23 +129,6 @@ import NavigationBar from '../components/OnlyBackPressNav';
       borderColor: "#495057",
       width: "100%"
     },
-    inputImageContainer: {
-      position: 'absolute',
-      top: 470,
-      marginLeft: -175,
-      left: "50%",
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      width: 350,
-      padding: 20,
-      borderRadius: 15,
-      shadowColor: '#171717',
-      shadowOffset: {width: -2, height: 4},
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-    },
     btnContainer: {
       width: "100%",
       justifyContent: "center",
@@ -169,7 +149,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-      backgroundColor: 'white',
+      backgroundColor: '#FFFFFF',
       padding: 30,
       borderRadius: 10,
       alignItems: 'center',

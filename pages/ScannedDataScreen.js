@@ -1,12 +1,9 @@
 // ScannedDataScreen.js
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import axios from 'axios';
 import { Linking } from 'react-native';
-
-import MyCamera from './myCamera';
 import NavigationBar from '../components/AfterScannedNavbar';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -14,68 +11,77 @@ export default function ScannedDataScreen({ route }) {
   const { data } = route.params;
   const navigation = useNavigation();
 
-// 일단 위치정보만 코드 api넘겨주고 만약에 위조 api일떄만 위치정보 받아와서 보고하기
-  const [location, setLocation] = useState(0);
-  const [errorMsg, setErrorMsg] = useState(null);
+  // 일단 위치정보만 코드 api넘겨주고 만약에 위조 api일떄만 위치정보 받아와서 보고하기
+  const [location, setLocation] = useState(null);
 
   // 안전한지, 아닌지 전달 받기
   const [isItSecure, setIsItSecure] = useState(false);
 
+  // 로딩(구별에 대한 결과 기다리는 중)
+  const [loading, setLoading] = useState(true);
+
+  // 경고 모달 창
+  const [modalVisible, setModalVisible] = useState(false);
+
   useEffect(() => {
-    (async () => {      
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location2 = await Location.getCurrentPositionAsync({});
-
-      setLocation(location2);
-
-      // 여기가 받아온 주소랑, 현재 위치 확인
-      // console.log(data);
-      // console.log(location);
+    (async () => {
+      let forSetLocation = await Location.getCurrentPositionAsync({});
+      setLocation(forSetLocation);
     })();
   }, []);
 
-  useEffect(() => {
-    // location 값이 변경될 때마다 이 효과가 실행됩니다.
-    sendDataToServer();
+  useEffect(() => { 
+    if (location !== null) {
+      // console.log(location, "in useEffect");
+      sendDataToServer();
+
+    }
   }, [location]);
 
-  let text = "위치정보를 받아오는 중...";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-    // console.log(text);
-  }
-  
   const sendDataToServer = async () => {
+    // console.log(location, "in sendDataToServer()");
+    // 테스트용으로 여기 한번 넣어봄(지금은 여기위치는 위치 불러와지면 setloading 풀기)
+    setLoading(false);
     try {
-      console.log(location.coords.longitude);
-      const response = await fetch('http://117.16.23.130:8016/api/address', {
+      const response = await fetch('http://180.67.59.4:80/api/address', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
           address: data,
-          gps: location.coords.longitude,
+          gps: `위도: ${location.coords.latitude} 경도: ${location.coords.longitude}`,
+          // 아래는 형식 예시
+          // gps: "위도: 123 경도: 31",
          })
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network   response was not ok');
+        throw new Error('Network response was not ok');
       }
   
-      const responseData = await response.json();
-      // console.log(responseData); // 서버로부터의 응답 처리
+      // POST요청에 대한 응답 이오면 IS IT SECURE 로딩 풀기, 민영이형한테 응답을 TRUE(안전) or FALSE(위험)로 부탁
+      // const responseData = await response.json();
+      // console.log(responseData);
+      // setIsItSecure(responseData.isSecure);
+      // console.log(location)
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
   };
+
+
+  // 모달 함수
+  const handleAskOpenUrl = () => {
+    setModalVisible(true); // 모달을 열음
+  };
+  const handleOpenUrl = () => {
+    Linking.openURL(data);
+    setModalVisible(false); // 모달을 닫음
+  };
+  const handleNoOpenUrl = () => {
+    setModalVisible(false);
+  }
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -87,7 +93,16 @@ export default function ScannedDataScreen({ route }) {
 
   //리포트 버튼 누르면 location값 전달하면서 이동하기
   const handleNotifyPress = () => {
-    navigation.navigate("Report", {location: location.coords.longitude});
+    navigation.navigate("Report", {location: location.coords});
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#6B7EFF" />
+        <Text style={styles.loadingText}>분석중이에요 🧐</Text>
+      </View>
+    );
   }
 
   return (
@@ -134,13 +149,47 @@ export default function ScannedDataScreen({ route }) {
                       borderRadius: 10,
                       backgroundColor: "#DB4455"
           }}>
-            <TouchableOpacity onPress={() => Linking.openURL(data)}>
+            <TouchableOpacity onPress={handleAskOpenUrl}>
               <Text style={styles.btnBoxMessage}>접속하기</Text>
             </TouchableOpacity>
           </View>
         </View>
       }
-      {/* <Text>{location ? `위도: ${location.coords.longitude} 경도: ${location.coords.latitude}` : text}</Text> */}
+      {/* 모달 */}
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>안전한지 확인이 어려운 사이트에요 🥲</Text>
+            <Text style={styles.modalText}>접속하시겠어요?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity onPress={handleOpenUrl}>
+                <View style={{
+                      height: 40,
+                      width: 100,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      backgroundColor: "#495057"
+                }}>
+                  <Text style={styles.btnBoxMessage}>예</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNoOpenUrl}>
+                <View style={{
+                      height: 40,
+                      width: 100,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      backgroundColor: "#495057"
+                }}>
+                  <Text style={styles.btnBoxMessage}>아니요</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>      
       <NavigationBar iconStyle_scanner={{ color: '#6B7EFF' }} onNotifyPress={handleNotifyPress} onBackPress={handleBackPress} onSharePress={handleSharePress}/>
     </View>
   );
@@ -170,7 +219,7 @@ const styles = StyleSheet.create({
     borderColor: "#495057",
   },
   securityContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     height: 200,
     width: "90%",
     alignItems: "center",
@@ -183,7 +232,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   urlContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     height: 80,
     width: "90%",
     alignItems: "center",
@@ -210,6 +259,46 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   btnBoxMessage: {
-    color: "white",
-  }
+    color: "#FFFFFF",
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    marginTop: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    width: "90%",
+    justifyContent: "space-around",
+  },
+  modalButton: {
+    padding: 10,
+    marginHorizontal: 10,
+    fontSize: 18,
+    color: '#007AFF',
+  },
 });

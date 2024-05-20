@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+// PAGE IMPORT
 import MyCamera from "./pages/myCamera";
 import ScannedDataScreen from './pages/ScannedDataScreen';
-import * as Location from 'expo-location';
 import HistoryPage from './pages/HistoryPage';
 import ReportPage from './pages/ReportPage';
 

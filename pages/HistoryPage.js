@@ -11,8 +11,13 @@ export default function HistoryPage({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>이용기록 페이지</Text>
-      {/* 이용기록에 관련된 내용을 표시합니다. */}
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoMessageText}>이용기록</Text>
+          <View style={styles.infoLine}></View>
+        </View>
+        <View style={styles.listContainer}>
+          
+        </View>
       <NavigationBar onScannerPress={handleScannerPress} iconStyle_history={{ color: '#6B7EFF' }}/>
     </View>
   );
@@ -24,4 +29,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  infoContainer: {
+    flex: 1,
+    width: "90%",
+    color: "#495057",
+  },
+  infoMessageText: {
+    fontSize: 40,
+    marginTop: 60,
+    marginBottom: 10,
+    color: "#495057",
+  },
+  infoLine: {
+    borderWidth:1,
+    borderColor: "#495057",
+  },
+  listContainer: {
+    flex: 6,
+    width: "90%",
+  }
 });
