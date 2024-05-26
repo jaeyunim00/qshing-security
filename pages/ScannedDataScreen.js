@@ -1,6 +1,6 @@
 // ScannedDataScreen.js
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Linking } from 'react-native';
@@ -39,34 +39,44 @@ export default function ScannedDataScreen({ route }) {
   }, [location]);
 
   const sendDataToServer = async () => {
-    // console.log(location, "in sendDataToServer()");
-    // 테스트용으로 여기 한번 넣어봄(지금은 여기위치는 위치 불러와지면 setloading 풀기)
-    setLoading(false);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), 3000)
+    );
+
+    const fetchPromise = fetch('http://180.67.59.4:80/api/address', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: data,
+        gps: `위도: ${location.coords.latitude} 경도: ${location.coords.longitude}`,
+      }),
+    });
+
     try {
-      const response = await fetch('http://180.67.59.4:80/api/address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          address: data,
-          gps: `위도: ${location.coords.latitude} 경도: ${location.coords.longitude}`,
-          // 아래는 형식 예시
-          // gps: "위도: 123 경도: 31",
-         })
-      });
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
-      // POST요청에 대한 응답 이오면 IS IT SECURE 로딩 풀기, 민영이형한테 응답을 TRUE(안전) or FALSE(위험)로 부탁
-      // const responseData = await response.json();
-      // console.log(responseData);
-      // setIsItSecure(responseData.isSecure);
-      // console.log(location)
+
+      const responseData = await response.json();
+      console.log(responseData);
+      setIsItSecure(responseData.risk); 
+      setLoading(false);
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
+      Alert.alert(
+        '서버 오류',
+        '서버가 열려있지 않습니다. 다시 시도해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('Camera'),
+          },
+        ]
+      );
     }
   };
 

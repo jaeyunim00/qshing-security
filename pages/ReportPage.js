@@ -105,7 +105,7 @@ import NavigationBar from '../components/OnlyBackPressNav';
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '`#FFFFFF`',
+      backgroundColor: "#FFFFFF",
       height: 300,
       width: 350,
       borderRadius: 15,
