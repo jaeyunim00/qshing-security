@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function NavigationBar({ onBackPress, onSharePress, onNotifyPress }) {
+export default function NavigationBar({ onBackPress, onNotifyPress }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={onBackPress}>
@@ -14,10 +14,7 @@ export default function NavigationBar({ onBackPress, onSharePress, onNotifyPress
         <MaterialIcons name="speaker-notes" size={24} style={[styles.icon]}/>
         <Text style={[styles.buttonText]}>알리기</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onSharePress}>
-        <MaterialIcons name="share" size={24} style={[styles.icon]}/>
-        <Text style={[styles.buttonText]}>공유하기</Text>
-      </TouchableOpacity>
+
     </View>
   );
 }
@@ -33,14 +30,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     height: 80,
-    shadowColor: "#000",
-    shadowOffset: {
-    	width: 0,
-    	height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.00,
-    elevation: 24,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    // 	width: 0,
+    // 	height: 12,
+    // },
+    // shadowOpacity: 0.58,
+    // shadowRadius: 16.00,
+    // elevation: 24,
   },
   icon: {
     color: '#A2A2A2', // 아이콘 기본 색상

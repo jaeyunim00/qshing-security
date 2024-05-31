@@ -1,51 +1,40 @@
 // MyCamera.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import * as Location from 'expo-location';
-import NavigationBar from '../components/NavigationBar';
 
 export default function MyCamera({ navigation }) {
-  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
-  const [locationPermission, requestLocationPermission] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions();
 
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      requestLocationPermission(status === 'granted');
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ data }) => {
-    console.log(data);
-    navigation.navigate('ScannedData', { data: data });
-  };
-
-  const handleHistoryPress = () => {
-    navigation.navigate('History'); // 이용기록 페이지로 이동
-  };
-
-  if (!cameraPermission || locationPermission === null) {
-    // 카메라 또는 위치 권한을 아직 로딩 중인 경우
+  if (!permission) {
+    // Camera permissions are still loading.
     return <View />;
   }
 
-  if (!cameraPermission.granted || !locationPermission) {
-    // 카메라 또는 위치 권한이 허용되지 않은 경우
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
     return (
-      <View style={styles.permissionContainer}>
-        <Text style={{ textAlign: 'center' }}>카메라 및 위치 접근 허용</Text>
-        <Button onPress={requestCameraPermission} title="카메라 권한 허용" />
-        <Button
-          onPress={async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            requestLocationPermission(status === 'granted');
-          }}
-          title="위치 권한 허용"
-        />
+      <View style={styles.camerapermissioncontainer}>
+        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+        <Button onPress={requestPermission} title="grant permission" />
       </View>
     );
   }
+
+  const handleBarCodeScanned = ({ data }) => {
+    navigation.navigate('ScannedData', { data: data });
+  };
 
   return (
     <View style={styles.container}>
@@ -60,7 +49,6 @@ export default function MyCamera({ navigation }) {
           <Text>큐알코드 피싱, 미리 방지하세요 🔒</Text>
         </View>
         <View style={styles.qrBox}></View>
-        <NavigationBar iconStyle_scanner={{ color: '#6B7EFF' }} onHistoryPress={handleHistoryPress} />
       </CameraView>
     </View>
   );
@@ -68,11 +56,11 @@ export default function MyCamera({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  permissionContainer: {
-    flex: 1,
-    justifyContent: "center",
+  camerapermissioncontainer: {
     alignItems: "center",
-  },
+    justifyContent: "center",
+    flex: 1,
+  },  
   camera: { flex: 1 },
   headMessage: {
     position: 'absolute',
@@ -85,11 +73,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     height: 60,
     width: 350,
-    borderRadius: 15,
-    shadowColor: '#171717',
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    // borderRadius: 15,
+    // shadowColor: '#171717',
+    // shadowOffset: { width: -2, height: 4 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
   },
   qrBox: {
     width: 200,

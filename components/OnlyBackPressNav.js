@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     height: 80,
     paddingLeft: 40,
-    shadowColor: "#000",
-    shadowOffset: {
-    	width: 0,
-    	height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.00,
-    elevation: 24,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    // 	width: 0,
+    // 	height: 12,
+    // },
+    // shadowOpacity: 0.58,
+    // shadowRadius: 16.00,
+    // elevation: 24,
   },
   icon: {
     color: '#A2A2A2', // 아이콘 기본 색상

@@ -14,9 +14,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -24,7 +21,9 @@
       },
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
-        "android.permission.ACCESS_FINE_LOCATION"
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ],
       "package": "com.jaeyunim.qsingsecurity"
     },
@@ -35,19 +34,21 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow qsing-security to use your location."
         }
       ],
-      "expo-build-properties",
-      {
-        "android": {
-          "usesCleartextTraffic": true
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow qsing-security to access your camera",
+          "microphonePermission": "Allow qsing-security to access your microphone",
+          "recordAudioAndroid": true
         }
-      }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "ffe83aa0-8746-4a9f-b6d8-07b6c3a37467"
+        "projectId": "95953aa3-f359-43cc-94ac-d5e08c573393"
       }
     }
   }

@@ -14,6 +14,8 @@ export default function ScannedDataScreen({ route }) {
   // 일단 위치정보만 코드 api넘겨주고 만약에 위조 api일떄만 위치정보 받아와서 보고하기
   const [location, setLocation] = useState(null);
 
+  const [myGps, setMyGps] = useState("");
+
   // 안전한지, 아닌지 전달 받기
   const [isItSecure, setIsItSecure] = useState(false);
 
@@ -34,7 +36,6 @@ export default function ScannedDataScreen({ route }) {
     if (location !== null) {
       // console.log(location, "in useEffect");
       sendDataToServer();
-
     }
   }, [location]);
 
@@ -43,7 +44,7 @@ export default function ScannedDataScreen({ route }) {
       setTimeout(() => reject(new Error('timeout')), 3000)
     );
 
-    const fetchPromise = fetch('http://180.67.59.4:80/api/address', {
+    const fetchPromise = fetch('http://117.16.23.154:8080/api/address', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,10 +64,14 @@ export default function ScannedDataScreen({ route }) {
 
       const responseData = await response.json();
       console.log(responseData);
-      setIsItSecure(responseData.risk); 
+      if(responseData.risk == "Warning site") {
+        setIsItSecure(false);
+      } else{
+        setIsItSecure(true);
+      }
+      setMyGps(responseData.gps);
       setLoading(false);
     } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
       Alert.alert(
         '서버 오류',
         '서버가 열려있지 않습니다. 다시 시도해주세요.',
@@ -97,13 +102,9 @@ export default function ScannedDataScreen({ route }) {
     navigation.goBack();
   };
 
-  const handleSharePress = () => {
-    console.log("share btn pressed");
-  }
-
   //리포트 버튼 누르면 location값 전달하면서 이동하기
   const handleNotifyPress = () => {
-    navigation.navigate("Report", {location: location.coords});
+    navigation.navigate("Report", {"url": data, "myGps": myGps});
   }
 
   if (loading) {
@@ -236,10 +237,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10, 
     marginTop: 10,
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    // shadowColor: '#171717',
+    // shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
   },
   urlContainer: {
     backgroundColor: "#FFFFFF",
@@ -250,10 +251,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row', // 요소들을 가로로 나열
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    // shadowColor: '#171717',
+    // shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
   },
   urlContent: {
     fontWeight: "bold",
@@ -263,10 +264,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    // shadowColor: '#171717',
+    // shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
   },
   btnBoxMessage: {
     color: "#FFFFFF",
