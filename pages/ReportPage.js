@@ -47,12 +47,12 @@ import NavigationBar from '../components/OnlyBackPressNav';
         </View>
         <View style={styles.inputInfoContainer}>
           <View style={styles.inputInfoMyLocation}>
-            <Text style={{padding: 10, fontSize: "15", fontWeight: "bold", color: "#495057"}}>현재 내 위치</Text>
-            <Text style={{padding: 10, fontSize: "15", fontWeight: 800}}>{gps}</Text>
+            <Text style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "#495057"}}>현재 내 위치</Text>
+            <Text style={{padding: 10, fontSize: 15, fontWeight: 800}}>{gps}</Text>
           </View>
           <View style={styles.infoLine}></View>
           <View style={styles.inputInfoDetail}>
-            <Text style={{padding: 10, fontSize: "15", fontWeight: "bold", color: "#495057"}}>상세 주소 입력</Text>
+            <Text style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "#495057"}}>상세 주소 입력</Text>
             <TextInput
             style={{ padding: 10, fontSize: 15, fontWeight: '800' }}
             placeholder="상세 주소를 입력하세요"
@@ -114,10 +114,10 @@ import NavigationBar from '../components/OnlyBackPressNav';
       height: 60,
       width: 350,
       borderRadius: 15,
-      // shadowColor: '#171717',
-      // shadowOffset: {width: -2, height: 4},
-      // shadowOpacity: 0.2,
-      // shadowRadius: 3,
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     },
     inputInfoContainer: {
       position: 'absolute',
@@ -131,10 +131,10 @@ import NavigationBar from '../components/OnlyBackPressNav';
       height: 300,
       width: 350,
       borderRadius: 15,
-      // shadowColor: '#171717',
-      // shadowOffset: {width: -2, height: 4},
-      // shadowOpacity: 0.2,
-      // shadowRadius: 3,
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     },
     inputInfoMyLocation: {
       flex: 1,
@@ -159,10 +159,10 @@ import NavigationBar from '../components/OnlyBackPressNav';
       bottom: 100,
       marginLeft: -197,
       left: "50%",
-      // shadowColor: '#171717',
-      // shadowOffset: {width: -2, height: 4},
-      // shadowOpacity: 0.2,
-      // shadowRadius: 3,
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     },
     modalContainer: {
       flex: 1,

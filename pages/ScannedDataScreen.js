@@ -201,7 +201,7 @@ export default function ScannedDataScreen({ route }) {
           </View>
         </View>
       </Modal>      
-      <NavigationBar iconStyle_scanner={{ color: '#6B7EFF' }} onNotifyPress={handleNotifyPress} onBackPress={handleBackPress} onSharePress={handleSharePress}/>
+      <NavigationBar iconStyle_scanner={{ color: '#6B7EFF' }} onNotifyPress={handleNotifyPress} onBackPress={handleBackPress}/>
     </View>
   );
 }
@@ -237,10 +237,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10, 
     marginTop: 10,
-    // shadowColor: '#171717',
-    // shadowOffset: {width: -2, height: 4},
-    // shadowOpacity: 0.2,
-    // shadowRadius: 3,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   urlContainer: {
     backgroundColor: "#FFFFFF",
@@ -251,10 +251,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row', // 요소들을 가로로 나열
-    // shadowColor: '#171717',
-    // shadowOffset: {width: -2, height: 4},
-    // shadowOpacity: 0.2,
-    // shadowRadius: 3,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   urlContent: {
     fontWeight: "bold",
@@ -264,10 +264,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    // shadowColor: '#171717',
-    // shadowOffset: {width: -2, height: 4},
-    // shadowOpacity: 0.2,
-    // shadowRadius: 3,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   btnBoxMessage: {
     color: "#FFFFFF",
