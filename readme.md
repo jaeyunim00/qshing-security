@@ -39,7 +39,7 @@
 - MySQL
 
 #### `Data`
-- 한국인터넷진흥원_피싱사이트모음
+- KISA_피싱url_csv (https://www.data.go.kr/data/15109780/fileData.do#tab-layer-file)
 - 사용자에의해 추가되는 악의적인 사이트
 
 </br>
