@@ -10,6 +10,7 @@
 
 ## 1. 제작 기간
 > 2024년 03월 02일 ~ 2024년 06월 12일 (승인 및 배포 완료)
+> </br>
 > https://m.onestore.co.kr/mobilepoc/apps/appsDetail.omp?prodId=0000776609
 
 </br>
